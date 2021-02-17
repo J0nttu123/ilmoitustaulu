@@ -25,7 +25,15 @@
         }
 
         public function create(){
+            // Chech login
+            if(!$this->session->userdata('logged')){
+                redirect('users/login');
+            }
+
             $data['title'] = 'Create Post';
+
+            $data['categories'] = $this->post_model->get_categories();
+            
 
             $this->form_validation->set_rules('title', 'Title', 'required');
             $this->form_validation->set_rules('body', 'Body', 'required');
@@ -35,18 +43,62 @@
             $this->load->view('posts/create', $data);
             $this->load->view('templates/footer');
             }else{
-                $this->post_model->create_post();
+                //Upload Image
+                $config['upload_path'] = './assets/images/posts';
+                $config['allowed_types'] = 'gif|jpg|png';
+                $config['max_size'] = '2048';
+                $config['max_width'] = '2000';
+                $config['max_height'] = '2000';
+
+                $this->load->library('upload', $config);
+
+                if(!$this->upload->do_upload()){
+                    $errors = array('error' => $this->upload->display_errors());
+					$post_image = 'noimage.jpg';
+                }else{
+                    $data = array('upload_data' => $this->upload->data());
+					$post_image = $_FILES['userfile']['name'];
+                }
+
+                $this->post_model->create_post($post_image);
+
+                // Set message
+                $this->session->set_flashdata('post_created',
+                    'Your post has been created');
+
                 redirect('posts');
             }
         }
 
         public function delete($id){
+            // Chech login
+            if(!$this->session->userdata('logged')){
+                redirect('users/login');
+            }
+
             $this->post_model->delete_post($id);
+
+            // Set message
+            $this->session->set_flashdata('post_deleted',
+            'Your post has been deleted');
+
             redirect('posts');
         }
 
         public function edit($slug){
+            // Chech login
+            if(!$this->session->userdata('logged')){
+                redirect('users/login');
+            }
+
             $data['post'] = $this->post_model->get_posts($slug);
+
+            // Check user
+			if($this->session->userdata('user_id') != $this->post_model->get_posts($slug)['user_id']){
+				redirect('posts');
+            }
+
+            $data['categories'] = $this->post_model->get_categories();
 
             if(empty($data['post'])){
                 show_404();
@@ -60,7 +112,17 @@
         }
 
         public function update(){
+            // Chech login
+            if(!$this->session->userdata('logged')){
+                redirect('users/login');
+            }
+
             $this->post_model->update_post();
+
+            // Set message
+            $this->session->set_flashdata('post_updated',
+            'Your post has been updated');
+
             redirect('posts');
         }
     }

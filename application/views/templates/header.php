@@ -16,30 +16,24 @@
   <div class="navbar-collapse collapse show" id="navbarColor01" style="">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url(); ?>">Home</a>
+        <a class="nav-link" href="<?php echo base_url(); ?>">Koti</a>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url(); ?>posts">Ilmoitukset</a>
+      </li>
+      <?php if(!$this->session->userdata('logged_in')) : ?>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url(); ?>users/login">Kirjaudu</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url(); ?>about">About</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url(); ?>posts">Blog</a>
-      </li>
-      <?php if(!$this->session->userdata('logged_in')) :?>
-      <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url(); ?>users/login">Login</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url(); ?>users/register">Register</a>
+        <a class="nav-link" href="<?php echo base_url(); ?>users/register">Rekisteröidy</a>
       </li>
       <?php endif; ?>
-      <?php if($this->session->userdata('logged_in')) :?>
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url(); ?>posts/create">Create Post</a>
+        <a class="nav-link" href="<?php echo base_url(); ?>posts/create">Luo ilmoitus</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url(); ?>users/logout">Logout</a>
+        <a class="nav-link" href="<?php echo base_url(); ?>users/logout">Kirjaudu ulos</a>
       </li>
-      <?php endif; ?>
     </ul>    
   </div>
 </nav>

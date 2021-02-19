@@ -2,7 +2,7 @@
     class Users extends CI_Controller{
         // Register user
         public function register(){
-            $data['title'] =  'Sign Up';
+            $data['title'] =  'Rekisteröidy';
 
             $this->form_validation->set_rules('username', 'Username',
              'required|callback_check_username_exists' );
@@ -25,7 +25,7 @@
 
                 // Set message
                 $this->session->set_flashdata('user_registered',
-                    'You are now registered can log in');
+                    'Rekisteröinti onnistui');
 
                 redirect('posts');
             }
@@ -34,7 +34,7 @@
 
         //Log in user
         public function login(){
-            $data['title'] =  'Sign in';
+            $data['title'] =  'Kirjaudu';
 
             $this->form_validation->set_rules('username', 'Username',
              'required' );
@@ -64,13 +64,13 @@
                     );
 
                     // Set message
-                    $this->session->set_flashdata('user_loggedin','You are now logged in');
+                    $this->session->set_flashdata('user_loggedin','Kirjautuminen onnistui');
 
                     redirect('posts');
                 } else {
                     // Set message
                     $this->session->set_flashdata('login_failed',
-                    'Login is invalid');
+                    'Kirjautuminen epäonnistui');
 
                     redirect('users/login');
                 }
@@ -86,7 +86,7 @@
             $this->session->unset_userdata('username');
 
             // Set message
-            $this->session->set_flashdata('user_loggedout','You are now logged out');
+            $this->session->set_flashdata('user_loggedout','Olet kirjautunut ulos');
 
             redirect('users/login');
         }
@@ -94,7 +94,7 @@
         //Check if username exists
         public function check_username_exists($username){
             $this->form_validation->set_message('check_username_exists',
-             'That username is taken. Please choose a different one');
+             'Käyttäjänimi on jo olemassa');
             if($this->user_model->check_username_exists($username)){
                 return true;
             } else {
@@ -105,7 +105,7 @@
         //Check if email exists
         public function check_email_exists($email){
             $this->form_validation->set_message('check_email_exists',
-             'That email is taken. Please choose a different one');
+             'Sähköposti on jo käytössä');
             if($this->user_model->check_email_exists($email)){
                 return true;
             } else {
